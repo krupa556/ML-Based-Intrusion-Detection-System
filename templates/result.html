@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<title>Intrusion Detection Result</title>
+
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+</head>
+
+<body>
+
+<div class="hero">
+
+<h1>Machine Learning Intrusion Detection System</h1>
+
+</div>
+
+<div class="container">
+
+<h2>Network Analysis Result</h2>
+
+{% if prediction_text == "Intrusion Detected" %}
+
+<div class="result-box" style="color:red; font-size:24px; font-weight:bold;">
+⚠️ Intrusion Detected
+</div>
+
+<p style="font-size:18px;">
+Suspicious network activity was detected by the IDS model.
+</p>
+
+{% else %}
+
+<div class="result-box" style="color:limegreen; font-size:24px; font-weight:bold;">
+✅ Normal Traffic
+</div>
+
+<p style="font-size:18px;">
+No malicious behavior detected in the analyzed traffic.
+</p>
+
+{% endif %}
+
+<br><br>
+
+<a href="/" class="detect-btn">
+Back to Traffic Input
+</a>
+
+</div>
+
+</body>
+
+</html>

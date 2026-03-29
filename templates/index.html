@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Machine Learning IDS</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+<div class="hero">
+<h1>Machine Learning Intrusion Detection System</h1>
+</div>
+<div class="container">
+<h2>Network Traffic Analysis</h2>
+<div class="form-container">
+<form action="/predict" method="post">
+<div class="grid">
+
+{% for col in numeric_columns %}
+
+<div class="input-box">
+<label>{{ col }}</label>
+<input type="text" name="{{ col }}" placeholder="Enter value">
+</div>
+
+{% endfor %}
+
+</div>
+<label>Protocol Type</label>
+
+<select id="protocol" onchange="setProtocol()">
+
+{% for col in protocol_columns %}
+
+<option value="{{ col }}">{{ col.split('_')[-1] }}</option>
+
+{% endfor %}
+
+</select>
+{% for col in protocol_columns %}
+<input type="hidden" name="{{ col }}" id="{{ col }}">
+{% endfor %}
+<label>Service</label>
+
+<select id="service" onchange="setService()">
+
+{% for col in service_columns %}
+
+<option value="{{ col }}">{{ col.split('_')[-1] }}</option>
+
+{% endfor %}
+
+</select>
+{% for col in service_columns %}
+<input type="hidden" name="{{ col }}" id="{{ col }}">
+{% endfor %}
+<label>Flag</label>
+
+<select id="flag" onchange="setFlag()">
+
+{% for col in flag_columns %}
+
+<option value="{{ col }}">{{ col.split('_')[-1] }}</option>
+
+{% endfor %}
+
+</select>
+{% for col in flag_columns %}
+<input type="hidden" name="{{ col }}" id="{{ col }}">
+{% endfor %}
+</div>
+<button type="button" onclick="autofill()">Auto Fill Remaining</button>
+<button type="submit" class="detect-btn">Detect Intrusion</button>
+{% if prediction_text %}
+<div class="result-box">
+{{ prediction_text }}
+</div>
+{% endif %}
+</form>
+</div>
+<div class="result">
+{{ prediction_text }}
+</div>
+</div>
+<script>
+    function autofill(){
+
+let inputs = document.querySelectorAll("input[type='text']");
+
+inputs.forEach(function(input){
+
+if(input.value === ""){
+input.value = 0;
+}
+
+});
+
+}
+
+function resetGroup(columns){
+
+columns.forEach(function(col){
+document.getElementById(col).value = 0;
+});
+
+}
+
+function setProtocol(){
+
+let selected = document.getElementById("protocol").value;
+
+let cols = {{ protocol_columns | tojson }};
+
+resetGroup(cols);
+
+document.getElementById(selected).value = 1;
+
+}
+
+function setService(){
+
+let selected = document.getElementById("service").value;
+
+let cols = {{ service_columns | tojson }};
+
+resetGroup(cols);
+
+document.getElementById(selected).value = 1;
+
+}
+
+function setFlag(){
+
+let selected = document.getElementById("flag").value;
+
+let cols = {{ flag_columns | tojson }};
+
+resetGroup(cols);
+
+document.getElementById(selected).value = 1;
+
+}
+
+window.onload = function(){
+
+setProtocol();
+setService();
+setFlag();
+
+};
+
+</script>
+</body>
+</html>
